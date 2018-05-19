@@ -1,0 +1,32 @@
+plugins {
+	id 'java-library'
+	id 'maven'
+}
+
+dependencies {
+	testImplementation 'org.apache.commons:commons-lang3:3.6'
+	testImplementation 'junit:junit:4.12'
+}
+
+repositories {
+	jcenter()
+}
+
+group = 'org.kyojo.minion'
+version = '0.7.0'
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
+tasks.withType(JavaCompile) {
+	options.encoding = 'UTF-8'
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+	classifier = 'sources'
+	from sourceSets.main.allSource
+}
+
+artifacts {
+	archives sourcesJar
+}
+
+
