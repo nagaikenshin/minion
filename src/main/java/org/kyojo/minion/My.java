@@ -15,6 +15,9 @@ import org.kyojo.gson.GsonBuilder;
 import org.kyojo.gson.reflect.TypeToken;
 import org.kyojo.modeshape.common.text.Inflector;
 
+/**
+ * This is the main class for using minion. minion is an object data exchange helper.
+ */
 public final class My {
 
 	public static String MYHS_SALT = "qgCYkPcrMl5WK2vK3VJF";
@@ -79,6 +82,12 @@ public final class My {
 		return null;
 	}
 
+	/**
+	 * Obtains the hash in hex string form.
+	 *
+	 * @param str a string (converted to bytes) to obtain its hash
+	 * @return hash string
+	 */
 	public static String hs(String str) {
 		if(str == null || str.equals("")) {
 			return "";
@@ -97,6 +106,12 @@ public final class My {
 		}
 	}
 
+	/**
+	 * Converts the given bytes to hex string form.
+	 *
+	 * @param bin bytes to convert
+	 * @return hex string
+	 */
 	public static String bin2HexStr(byte[] bin) {
 		StringBuilder sb = new StringBuilder();
 		int len = bin.length;
@@ -112,34 +127,98 @@ public final class My {
 		return sb.toString();
 	}
 
+	/**
+	 * Serializes the given object to JSON. This method is the wrapper of {@link GSON#toJSON}.
+	 * But it added the feature own keys sorted in ascii order.
+	 *
+	 * @param var object to serialize
+	 * @return JSON string
+	 */
 	public static String minion(Object var) {
 		return gson.toJson(var);
 	}
 
+	/**
+	 * Deserializes the given JSON string to the object. This method is the wrapper of {@link GSON#fromJSON}.
+	 * The deserializer classes defined in {@code org/kyojo/minion/My.properties} are registered automatically.
+	 *
+	 * @param str JSON string
+	 * @param type the object type
+	 * @return the deserialized object
+	 */
 	public static <T> T deminion(String str, Type type) {
 		return gson.fromJson(str, type);
 	}
 
+	/**
+	 * The tableize method. e.g. {@code creativeWork.author} → {@code creative_work__author}
+	 *
+	 * @param word A word to convert
+	 * @return converted string
+	 */
 	public static String tableize(String word) {
+		if(word == null) return null;
 		Inflector inflector = Inflector.getInstance();
 		return inflector.underscore(word.replaceAll("\\.", "__"));
 	}
 
+	/**
+	 * The pascalize method. e.g. {@code creative_work__author} → {@code CreativeWork.Author}
+	 *
+	 * @param word A word to convert
+	 * @return converted string
+	 */
 	public static String pascalize(String word) {
+		if(word == null) return null;
 		Inflector inflector = Inflector.getInstance();
-		return inflector.upperCamelCase(word.replaceAll("__", "."));
+		StringBuilder sb = new StringBuilder();
+		for(String elem : word.toLowerCase().split("__|\\.")) {
+			if(sb.length() > 0) {
+				sb.append(".");
+			}
+			sb.append(inflector.upperCamelCase(elem));
+		}
+		return sb.toString();
 	}
 
+	/**
+	 * The camelize method. e.g. {@code creative_work__author} → {@code creativeWork.author}
+	 *
+	 * @param word A word to convert
+	 * @return converted string
+	 */
 	public static String camelize(String word) {
+		if(word == null) return null;
 		Inflector inflector = Inflector.getInstance();
-		return inflector.lowerCamelCase(word.replaceAll("__", "."));
+		StringBuilder sb = new StringBuilder();
+		for(String elem : word.toLowerCase().split("__|\\.")) {
+			if(sb.length() > 0) {
+				sb.append(".");
+			}
+			sb.append(inflector.lowerCamelCase(elem));
+		}
+		return sb.toString();
 	}
 
+	/**
+	 * The constantize method. e.g. {@code creativeWork.author} → {@code CREATIVE_WORK__AUTHOR}
+	 *
+	 * @param word A word to convert
+	 * @return converted string
+	 */
 	public static String constantize(String word) {
+		if(word == null) return null;
 		return tableize(word).toUpperCase();
 	}
 
+	/**
+	 * The magicalize method. e.g. {@code creativeWork.author} → {@code __CREATIVE_WORK__AUTHOR__}
+	 *
+	 * @param word A word to convert
+	 * @return converted string
+	 */
 	public static String magicalize(String word) {
+		if(word == null) return null;
 		return "__" + constantize(word) + "__";
 	}
 

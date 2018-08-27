@@ -18,4 +18,4 @@ The GSON embedded in minion is added the following rules of the JSON serializati
 * sorting keys by the ASCII order.
 * the exchange rules of escape characters is defined in one way.
 
-In the case telling the difference, we call it minion especially.
+In the case telling the difference by normal JSON, we call it minion especially.

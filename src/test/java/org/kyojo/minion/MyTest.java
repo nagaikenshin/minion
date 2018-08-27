@@ -89,7 +89,7 @@ public class MyTest {
 
 	@Test
 	public void testPascalize() {
-		assertEquals("Abc.defGhi", My.pascalize("abc__def_ghi"));
+		assertEquals("Abc.DefGhi", My.pascalize("abc__def_ghi"));
 	}
 
 	@Test
