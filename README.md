@@ -19,3 +19,8 @@ The GSON embedded in minion is added the following rules of the JSON serializati
 * the exchange rules of escape characters is defined in one way.
 
 In the case telling the difference by normal JSON, we call it minion especially.
+
+Maven Repository
+----------------
+
+[minion](https://mvnrepository.com/artifact/org.kyojo/minion)

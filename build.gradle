@@ -1,6 +1,7 @@
 plugins {
 	id 'java-library'
 	id 'maven'
+	id 'signing'
 }
 
 dependencies {
@@ -9,11 +10,12 @@ dependencies {
 }
 
 repositories {
-	jcenter()
+	mavenLocal()
+	mavenCentral()
 }
 
-group = 'org.kyojo.minion'
-version = '0.7.1'
+group = 'org.kyojo'
+version = '0.7.2'
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
 tasks.withType(JavaCompile) {
@@ -37,16 +39,67 @@ javadoc {
 	options.locale = 'en_US'
 }
 
-task javadocs(type: Javadoc) {
+task javadocGen(type: Javadoc) {
 	source = sourceSets.main.allJava
 }
 
-task javadocsJar(type: Jar, dependsOn: javadoc) {
-	classifier = 'javadocs'
-	from javadocs.destinationDir
+task javadocJar(type: Jar, dependsOn: javadoc) {
+	classifier = 'javadoc'
+	from javadocGen.destinationDir
 }
 
 artifacts {
 	archives sourcesJar
-	archives javadocsJar
+	archives javadocJar
+}
+
+signing {
+	sign configurations.archives
+}
+
+uploadArchives {
+	repositories {
+		mavenDeployer {
+			beforeDeployment {
+				MavenDeployment deployment -> signing.signPom(deployment)
+			}
+
+			repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+				authentication(userName: ossrhUsername, password: ossrhPassword)
+			}
+
+			snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+				authentication(userName: ossrhUsername, password: ossrhPassword)
+			}
+
+			pom.project {
+				name 'minion'
+				packaging 'jar'
+				// optionally artifactId can be defined here
+				description 'Object data exchange helper'
+				url 'https://github.com/nagaikenshin/minion'
+
+				scm {
+					connection 'scm:git:git://github.com/nagaikenshin/minion.git'
+					developerConnection 'scm:git:ssh://github.com:nagaikenshin/minion.git'
+					url 'https://github.com/nagaikenshin/minion/tree/master'
+				}
+
+				licenses {
+					license {
+						name 'The Apache License, Version 2.0'
+						url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+					}
+				}
+
+				developers {
+					developer {
+						id 'nagaikenshin'
+						name 'nagaikenshin'
+						email 'nagai@nagaikenshin.com'
+					}
+				}
+			}
+		}
+	}
 }

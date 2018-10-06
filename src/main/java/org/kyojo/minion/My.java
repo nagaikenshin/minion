@@ -172,7 +172,7 @@ public final class My {
 		if(word == null) return null;
 		Inflector inflector = Inflector.getInstance();
 		StringBuilder sb = new StringBuilder();
-		for(String elem : word.toLowerCase().split("__|\\.")) {
+		for(String elem : word.split("__|\\.")) {
 			if(sb.length() > 0) {
 				sb.append(".");
 			}
@@ -191,7 +191,7 @@ public final class My {
 		if(word == null) return null;
 		Inflector inflector = Inflector.getInstance();
 		StringBuilder sb = new StringBuilder();
-		for(String elem : word.toLowerCase().split("__|\\.")) {
+		for(String elem : word.split("__|\\.")) {
 			if(sb.length() > 0) {
 				sb.append(".");
 			}
