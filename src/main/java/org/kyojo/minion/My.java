@@ -89,13 +89,28 @@ public final class My {
 	 * @return hash string
 	 */
 	public static String hs(String str) {
+		return hs(str, null);
+	}
+
+	/**
+	 * Obtains the hash in hex string form.
+	 *
+	 * @param str a string (converted to bytes) to obtain its hash
+	 * @param charsetName The name of a supported charset
+	 * @return hash string
+	 */
+	public static String hs(String str, String charsetName) {
 		if(str == null || str.equals("")) {
 			return "";
 		}
 
 		try {
 			MessageDigest md = MessageDigest.getInstance("SHA-256");
-			md.update((MYHS_SALT + str).getBytes("ISO-8859-1"));
+			if(charsetName == null) {
+				md.update((MYHS_SALT + str).getBytes());
+			} else {
+				md.update((MYHS_SALT + str).getBytes(charsetName));
+			}
 			return bin2HexStr(md.digest());
 		} catch(NoSuchAlgorithmException nsae) {
 			nsae.printStackTrace();

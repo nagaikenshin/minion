@@ -15,7 +15,7 @@ repositories {
 }
 
 group = 'org.kyojo'
-version = '0.7.2'
+version = '0.8.0'
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
 tasks.withType(JavaCompile) {
